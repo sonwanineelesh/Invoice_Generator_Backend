@@ -1,0 +1,21 @@
+name: Backend health check
+
+on:
+  schedule:
+    # Runs every 10 minutes. GitHub may delay scheduled workflows.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployed backend
+        env:
+          BACKEND_HEALTH_URL: ${{ vars.BACKEND_HEALTH_URL }}
+        run: |
+          if [ -z "$BACKEND_HEALTH_URL" ]; then
+            echo "Repository variable BACKEND_HEALTH_URL is not configured."
+            exit 1
+          fi
+          curl --fail --silent --show-error --max-time 60 "$BACKEND_HEALTH_URL"

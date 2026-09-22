@@ -26,6 +26,12 @@ class InvoiceControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    void testHealth() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/health"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void testCreateInvoiceCorsAndEndpoint() throws Exception {
         InvoiceDTO dto = new InvoiceDTO();
         dto.setInvoiceNumber("INV-TEST-CORS");
